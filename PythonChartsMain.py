@@ -13,12 +13,13 @@ class PythonChartsMain:
         self.marketdata = MarketDataAPI()
         self.gui = GuiChart()
         self.browser = BrowserChart()
+        self.seperator = "**************************************************************************"
 
     def main(self):
 
         while True:
             # Choose Api to launch a query for
-            print("**************************************************************************")
+            print(self.seperator)
             print()
             api_choice = input("Enter 1 to use AlphaVantageAPIs"
                                "\nEnter 2 to use MarketDataAPI"
@@ -36,25 +37,25 @@ class PythonChartsMain:
                 app.get_chart(dataframe)
 
     def get_alphavantage(self):
-        print("**************************************************************************")
+        print(self.seperator)
         stock_data = self.alphavantage.start_query()  # call Api
         dataframe = pd.read_csv(StringIO(stock_data))  # Copy to dataframe
         dataframe['timestamp'] = pd.to_datetime(dataframe['timestamp'], format='%Y-%m-%d').dt.strftime('%m/%d/%Y')
         dataframe.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume']  # Rename Columns
         dataframe.index = pd.to_datetime(dataframe['Date'])  # Set index
-        print("**************************************************************************")
+        print(self.seperator)
 
         return dataframe
 
     def get_marketdata(self):
-        print("**************************************************************************")
+        print(self.seperator)
         stock_data = self.marketdata.start_query()
         dataframe = pd.read_csv(StringIO(stock_data))  # Copy to dataframe
         dataframe['t'] = pd.to_datetime(dataframe['t'], unit='s').dt.strftime('%m/%d/%Y')  # format Date
         dataframe = dataframe[['t', 'o', 'h', 'l', 'c', 'v']]  # Reorder columns
         dataframe.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume']  # Rename columns
         dataframe.index = pd.to_datetime(dataframe['Date'])  # Set index
-        print("**************************************************************************")
+        print(self.seperator)
 
         return dataframe
 
